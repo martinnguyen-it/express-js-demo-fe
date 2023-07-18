@@ -43,10 +43,10 @@ const Header = () => {
                     </>
                 ) : (
                     <>
-                        <Link href={'/login'} className='nav__el'>
+                        <Link href={'/auth/login'} className='nav__el'>
                             Log in
                         </Link>
-                        <Link href={'sign-up'} className='nav__el nav__el--cta'>
+                        <Link href={'/auth/sign-up'} className='nav__el nav__el--cta'>
                             Sign up
                         </Link>
                     </>

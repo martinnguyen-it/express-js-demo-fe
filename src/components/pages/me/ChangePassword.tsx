@@ -1,12 +1,12 @@
 import { IUserData } from '@/src/contexts/UserContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { FormUpdatePasswordSchema } from '../../lib/domain/formUser';
 import { TUpdatePasswordType } from '@/src/lib/types/userType';
 import { useUpdatePassword } from '@/src/lib/hooks/api/user/useUpdatePassword';
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';
-import Spinner from '../Spinner';
+import { FormUpdatePasswordSchema } from '@/src/lib/domain/formUser';
+import Spinner from '../../Spinner';
 
 const ChangePassword = ({ setUserData }: { setUserData: React.Dispatch<React.SetStateAction<IUserData>> }) => {
     const updatePassword = useUpdatePassword();

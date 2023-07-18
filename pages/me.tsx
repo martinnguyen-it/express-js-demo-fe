@@ -1,12 +1,13 @@
-import ChangeInfor from '@/src/components/user/ChangeInfor';
-import ChangePassword from '@/src/components/user/ChangePassword';
+import { privateRouteWrapper, withAuthTokenWrapper } from '@/src/components/hoc/auth';
+import ChangeInfor from '@/src/components/pages/me/ChangeInfor';
+import ChangePassword from '@/src/components/pages/me/ChangePassword';
 import { queryFunction } from '@/src/lib/hooks/api';
 import { useUserDataContext } from '@/src/lib/hooks/context';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
-const Login = () => {
+const Me = () => {
     const { userData, setUserData } = useUserDataContext();
     const { data: respon, isSuccess } = useQuery('users/me', queryFunction);
     const role = useMemo(() => {
@@ -107,4 +108,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default withAuthTokenWrapper(privateRouteWrapper(Me));

@@ -15,14 +15,12 @@ export const FormSignUpSchema = yup.object({
         .min(8, 'Password confirm must be at least 8 characters')
         .oneOf([yup.ref('password')], 'Passwords must match'),
 });
-
 export type FormLoginSchemaType = yup.InferType<typeof FormLoginSchema>;
 
 export const FormUpdateUserSchema = yup.object({
     email: yup.string().optional().email('Email is invalid'),
     name: yup.string().optional(),
 });
-
 export type FormUpdateUserSchemaType = yup.InferType<typeof FormUpdateUserSchema>;
 
 export const FormUpdatePasswordSchema = yup.object({
@@ -34,5 +32,13 @@ export const FormUpdatePasswordSchema = yup.object({
         .min(8, 'Password confirm must be at least 8 characters')
         .oneOf([yup.ref('newPassword')], 'Passwords must match'),
 });
-
 export type FormUpdatePasswordSchemaType = yup.InferType<typeof FormUpdatePasswordSchema>;
+
+export const FormResetPasswordSchema = yup.object({
+    password: yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+    passwordConfirm: yup
+        .string()
+        .required('Password confirm is required')
+        .min(8, 'Password confirm must be at least 8 characters')
+        .oneOf([yup.ref('password')], 'Passwords must match'),
+});

@@ -166,7 +166,7 @@ export default function Tour() {
                                 <p className='cta__text'>
                                     5 days. 1 adventure. Infinite memories. Make it yours today!
                                 </p>
-                                <Link className='btn btn--green span-all-rows' href='/login'>
+                                <Link className='btn btn--green span-all-rows' href='/auth/login'>
                                     Log in to book tour
                                 </Link>
                             </div>

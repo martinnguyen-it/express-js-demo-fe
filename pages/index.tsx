@@ -4,10 +4,20 @@ import { useQuery } from 'react-query';
 import { queryFunction } from '@/src/lib/hooks/api';
 import { isEmpty, map } from 'lodash';
 import Spinner from '@/src/components/Spinner';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
 
 export default function Home() {
-    const { isLoading, isError, data, error, isSuccess } = useQuery('tours/', queryFunction);
-
+    const { isLoading, data, error, isSuccess } = useQuery('tours', queryFunction);
+    useEffect(() => {
+        const errorRespon = error as AxiosError<any, any> | undefined;
+        if (errorRespon) {
+            toast.error(errorRespon.message, {
+                autoClose: 5000,
+            });
+        }
+    }, [error]);
     return (
         <>
             <Head>

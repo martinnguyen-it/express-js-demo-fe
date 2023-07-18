@@ -1,20 +1,20 @@
 import Spinner from '@/src/components/Spinner';
 import { IUserData } from '@/src/contexts/UserContext';
-import { FormLoginSchema } from '@/src/lib/domain/formUser';
-import { useLogin } from '@/src/lib/hooks/api/auth/useLogin';
+import { FormResetPasswordSchema } from '@/src/lib/domain/formUser';
+import { useResetPassword } from '@/src/lib/hooks/api';
 import { useUserDataContext } from '@/src/lib/hooks/context';
+import { TResetPasswordType } from '@/src/lib/types/userType';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-interface IForm {
-    email: string;
-    password: string;
-}
-const Login = () => {
+
+const ResetPassword = () => {
     const router = useRouter();
-    const { userData, setUserData, token, setToken } = useUserDataContext();
+    const { id } = router.query;
+
+    const { userData, setUserData, token } = useUserDataContext();
 
     if (userData && userData.name && token) router.push('/');
 
@@ -23,24 +23,26 @@ const Login = () => {
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm<IForm>({
-        resolver: yupResolver(FormLoginSchema),
+    } = useForm<TResetPasswordType>({
+        resolver: yupResolver(FormResetPasswordSchema),
     });
-    const loginUser = useLogin();
-    const handleLogin = useCallback(
-        handleSubmit(async (data: IForm) => {
-            loginUser.sendRequest(
-                { payload: data },
+    const resetPasswordApi = useResetPassword();
+
+    const handleResetPassword = useCallback(
+        handleSubmit(async (data: TResetPasswordType) => {
+            resetPasswordApi.sendRequest(
+                { payload: data, tokenResetPassword: id as string },
                 {
                     onSuccess: async (respon: any) => {
-                        toast.success('Login successful!');
+                        toast.success('Reset password successful!');
                         const user = {
                             name: respon.data.data.user.name,
                             email: respon.data.data.user.email,
                             photo: respon.data.data.user?.photo,
                             role: respon.data.data.user.role,
+                            token: respon.data.token,
                         } as IUserData;
-                        await setToken(respon.data.token);
+
                         await setUserData(user);
                         reset();
                     },
@@ -50,29 +52,14 @@ const Login = () => {
                 },
             );
         }),
-        [],
+        [id],
     );
 
     return (
         <main className='main'>
             <div className='login-form'>
-                <h2 className='heading-secondary ma-bt-lg'>Log into your account</h2>
-                <form className='form form--login'>
-                    <div className='form__group'>
-                        <label className='form__label' htmlFor='email'>
-                            Email address
-                        </label>
-                        <input
-                            className='form__input'
-                            id='email'
-                            {...register('email')}
-                            type='email'
-                            placeholder='you@example.com'
-                        />
-                        {errors.email && (
-                            <p className='pl-[1rem] pt-1 text-2xl text-red-600'>{errors.email?.message}</p>
-                        )}
-                    </div>
+                <h2 className='heading-secondary ma-bt-lg'>Create your account!</h2>
+                <div className='form form--login'>
                     <div className='form__group ma-bt-md'>
                         <label className='form__label' htmlFor='password'>
                             Password
@@ -88,16 +75,31 @@ const Login = () => {
                             <p className='pl-[1rem]  pt-1 text-2xl text-red-600'>{errors.password?.message}</p>
                         )}
                     </div>
+                    <div className='form__group ma-bt-md'>
+                        <label className='form__label' htmlFor='passwordConfirm'>
+                            Confirm password
+                        </label>
+                        <input
+                            {...register('passwordConfirm')}
+                            className='form__input'
+                            id='passwordConfirm'
+                            type='password'
+                            placeholder=''
+                        />
+                        {errors.passwordConfirm && (
+                            <p className='pl-[1rem]  pt-1 text-2xl text-red-600'>{errors.passwordConfirm?.message}</p>
+                        )}
+                    </div>
                     <div className='form__group'>
-                        <button onClick={handleLogin} className='btn btn--green btn--loading'>
-                            {loginUser.isLoading && <Spinner />}
-                            <p>Login</p>
+                        <button onClick={handleResetPassword} className='btn btn--green btn--loading'>
+                            {resetPasswordApi.isLoading && <Spinner />}
+                            <p>Reset password</p>
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
         </main>
     );
 };
 
-export default Login;
+export default ResetPassword;

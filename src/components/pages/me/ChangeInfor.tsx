@@ -3,7 +3,7 @@ import { useUpdateMe } from '@/src/lib/hooks/api/user/useUpdateMe';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import Spinner from '../Spinner';
+import Spinner from '../../Spinner';
 import { IMAGE_BASE_URL } from '@/src/shared/constants';
 import imageCompression from 'browser-image-compression';
 import { TUpdateMeType } from '@/src/lib/types/userType';
@@ -42,10 +42,7 @@ const ChangeInfor = ({
     const handleUpdate = useCallback(
         handleSubmit(async (data: IForm) => {
             const filteredObj = _.pickBy(data, _.identity);
-            console.log('🚀 ~ file: ChangeInfor.tsx:45 ~ handleSubmit ~ filteredObj:', filteredObj);
             if (!_.isEmpty(filteredObj) || imgFile) {
-                console.log('🚀 ~ file: ChangeInfor.tsx:44 ~ handleSubmit ~ imgFile:', imgFile);
-                console.log('🚀 ~ file: ChangeInfor.tsx:44 ~ handleSubmit ~ data:', data);
                 setError('');
                 !data.email && (data.email = userData?.email);
                 !data.name && (data.name = userData?.name);
@@ -134,6 +131,12 @@ const ChangeInfor = ({
                         name='email'
                     />
                     {errors.email && <p className='pl-[1rem] pt-1 text-2xl text-red-600'>{errors.email?.message}</p>}
+                </div>
+                <div className='form__group ma-bt-md'>
+                    <label className='form__label' htmlFor='role'>
+                        Role
+                    </label>
+                    <input className='form__input !capitalize' id='role' disabled defaultValue={userData?.role} />
                 </div>
                 <div className='form__group form__photo-upload'>
                     {imgFileURL || (userData && userData.photo) ? (

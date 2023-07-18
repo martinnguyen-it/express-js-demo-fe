@@ -22,3 +22,8 @@ export type TUpdatePasswordType = {
     newPassword: string;
     newPasswordConfirm: string;
 };
+
+export type TResetPasswordType = {
+    password: string;
+    passwordConfirm: string;
+};
