@@ -31,6 +31,11 @@ export default function Home() {
                     {isSuccess &&
                         !isEmpty(data.data.data) &&
                         map(data.data.data, (tour, index) => <Card key={index} tour={tour} />)}
+                    {isSuccess && isEmpty(data.data.data) && (
+                        <>
+                            <h1>No tour has been booking.</h1>
+                        </>
+                    )}
                 </div>
             </main>
         </>

@@ -17,7 +17,10 @@ const MyTour = () => {
                             You have successfully paid!<br></br>
                             Please visit the Booking page for details.
                         </h1>
-                        <Link href={'/'} className='card__sub-heading mt-20 flex !h-[20px]  justify-center !text-2xl'>
+                        <Link
+                            href={'/my-tours'}
+                            className='card__sub-heading mt-20 flex !h-[20px]  justify-center !text-2xl'
+                        >
                             <img className='h-[70px]' src='/img/giphy.gif' alt='gif' />
                             <span className='leading-[42px]'> Go to the Booking page</span>
                         </Link>
