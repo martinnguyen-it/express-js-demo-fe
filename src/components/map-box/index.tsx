@@ -1,7 +1,7 @@
 import { ILocation } from '@/src/lib/types';
 import { isEmpty } from 'lodash';
-import mapboxgl, { Map, Marker } from 'mapbox-gl';
-import { memo, useEffect, useRef, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
+import { useEffect, useRef } from 'react';
 
 const MapContainer = ({ locations }: { locations: ILocation[] }) => {
     mapboxgl.accessToken =
@@ -19,7 +19,7 @@ const MapContainer = ({ locations }: { locations: ILocation[] }) => {
                 const bounds = new mapboxgl.LngLatBounds();
 
                 !isEmpty(locations && map) &&
-                    locations.forEach((loc, index) => {
+                    locations.forEach((loc) => {
                         if (loc.coordinates.length == 2) {
                             // Create marker
                             const el = document.createElement('div');
@@ -35,7 +35,7 @@ const MapContainer = ({ locations }: { locations: ILocation[] }) => {
                                 .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
                                 .addTo(map);
                             // Add marker
-                            const Marker = new mapboxgl.Marker({
+                            new mapboxgl.Marker({
                                 element: el,
                                 anchor: 'bottom',
                             })

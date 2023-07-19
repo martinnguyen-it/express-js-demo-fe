@@ -16,7 +16,6 @@ const StateLinkContext = React.createContext<IStateLinkContext>(DEFAULT_STATE_LI
 
 export const StateLinkContextProvider: React.FC<{ children: any }> = ({ children }) => {
     const [stateLink, setStateLink] = useLocalStorage({ key: STATE_LINK, defaultValue: {} });
-
     return <StateLinkContext.Provider value={{ stateLink, setStateLink }}>{children}</StateLinkContext.Provider>;
 };
 

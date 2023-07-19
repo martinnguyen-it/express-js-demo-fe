@@ -1,28 +1,48 @@
 import Head from 'next/head';
 import Spinner from '@/src/components/Spinner';
 import { ITour } from '@lib/types';
-import { useStateLinkContext } from '@/src/lib/hooks/context';
+import { useUserDataContext } from '@/src/lib/hooks/context';
 import { useQuery } from 'react-query';
 import { queryFunction } from '@/src/lib/hooks/api';
 import { isEmpty, map } from 'lodash';
-import GuideItem from '@/src/components/tour/GuideItem';
+import GuideItem from '@/src/components/pages/tour/GuideItem';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { IMAGE_BASE_URL } from '@/src/shared/constants';
+import { useRouter } from 'next/router';
+import QuickFact from '@/src/components/pages/tour/QuickFact';
+import { useGetLinkPayment } from '@/src/lib/hooks/api/booking/useGetLinkPayment';
 // import MapContainer from '@/src/components/map-box';
 
 const MapContainer = dynamic(import('@/src/components/map-box'), { ssr: false });
-const ReviewSlider = dynamic(import('@/src/components/tour/review/index'), { ssr: false });
+const ReviewSlider = dynamic(import('@/src/components/pages/tour/review/index'), { ssr: false });
 
 export default function Tour() {
-    const { stateLink } = useStateLinkContext();
-    const { isLoading, data, isSuccess } = useQuery(`tours/${stateLink?.id}`, queryFunction);
+    const { token } = useUserDataContext();
+
+    const router = useRouter();
+    const { isLoading, data, isSuccess } = useQuery(`tours/slug/${router.query.id}`, queryFunction);
     const tour: ITour = data?.data.data;
     const tourDate = new Date(tour?.startDates[0]);
     const date = tourDate?.toLocaleString('en-us', {
         month: 'long',
         year: 'numeric',
     });
+
+    const getLinkPaymentApi = useGetLinkPayment();
+
+    const onBooking = () => {
+        getLinkPaymentApi.sendRequest(
+            { payload: { amount: tour.price, tourId: tour.id } },
+            {
+                onSuccess: (respon: any) => {
+                    const vnpUrl = respon.data.data.vnpUrl;
+                    window.location.href = vnpUrl;
+                },
+            },
+        );
+    };
+
     return (
         <>
             <Head>
@@ -70,34 +90,34 @@ export default function Tour() {
                             <div>
                                 <div className='overview-box__group'>
                                     <h2 className='heading-secondary ma-bt-lg'>Quick facts</h2>
-                                    <div className='overview-box__detail'>
-                                        <svg className='overview-box__icon'>
-                                            <use xlinkHref='/img/icons.svg#icon-calendar'></use>
-                                        </svg>
-                                        <span className='overview-box__label'>Next date</span>
-                                        <span className='overview-box__text'>{date}</span>
-                                    </div>
-                                    <div className='overview-box__detail'>
-                                        <svg className='overview-box__icon'>
-                                            <use xlinkHref='/img/icons.svg#icon-trending-up'></use>
-                                        </svg>
-                                        <span className='overview-box__label'>Difficulty</span>
-                                        <span className='overview-box__text'>{tour.difficulty}</span>
-                                    </div>
-                                    <div className='overview-box__detail'>
-                                        <svg className='overview-box__icon'>
-                                            <use xlinkHref='/img/icons.svg#icon-user'></use>
-                                        </svg>
-                                        <span className='overview-box__label'>Participants</span>
-                                        <span className='overview-box__text'>{tour.maxGroupSize} people</span>
-                                    </div>
-                                    <div className='overview-box__detail'>
-                                        <svg className='overview-box__icon'>
-                                            <use xlinkHref='/img/icons.svg#icon-star'></use>
-                                        </svg>
-                                        <span className='overview-box__label'>Rating</span>
-                                        <span className='overview-box__text'>{tour.ratingsAverage} / 5</span>
-                                    </div>
+                                    <QuickFact
+                                        xlinkHref='/img/icons.svg#icon-calendar'
+                                        label='Next date'
+                                        value={date}
+                                    />
+                                    <QuickFact
+                                        xlinkHref='/img/icons.svg#icon-trending-up'
+                                        label='Difficulty'
+                                        value={tour.difficulty}
+                                    />
+                                    <QuickFact
+                                        xlinkHref='/img/icons.svg#icon-user'
+                                        label='Participants'
+                                        value={`${tour.maxGroupSize} people`}
+                                    />
+                                    <QuickFact
+                                        xlinkHref='/img/icons.svg#icon-star'
+                                        label='Rating'
+                                        value={`${tour.ratingsAverage} / 5`}
+                                    />
+                                    <QuickFact
+                                        xlinkHref='/img/icons.svg#money'
+                                        label='Price'
+                                        value={`${tour.price.toLocaleString('vi', {
+                                            style: 'currency',
+                                            currency: 'VND',
+                                        })}`}
+                                    />
                                 </div>
                                 <div className='overview-box__group'>
                                     <h2 className='heading-secondary ma-bt-lg'>Your tour guides</h2>
@@ -166,9 +186,19 @@ export default function Tour() {
                                 <p className='cta__text'>
                                     5 days. 1 adventure. Infinite memories. Make it yours today!
                                 </p>
-                                <Link className='btn btn--green span-all-rows' href='/auth/login'>
-                                    Log in to book tour
-                                </Link>
+                                {token ? (
+                                    <button className='btn btn--green span-all-rows btn--loading' onClick={onBooking}>
+                                        {getLinkPaymentApi.isLoading && <Spinner />}
+                                        <p>Booking now!</p>
+                                    </button>
+                                ) : (
+                                    <Link
+                                        className='btn btn--green span-all-rows'
+                                        href={{ pathname: '/auth/login', query: { tour: router.query.id as string } }}
+                                    >
+                                        Log in to book tour
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </section>

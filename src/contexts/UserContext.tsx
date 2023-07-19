@@ -34,17 +34,17 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
     });
 
     const [token, setToken] = useState<string>(() => {
-        return typeof window !== 'undefined' ? localStorage.getItem(LOCAL_STORAGE_KEY_TOKEN) || '' : '';
+        return typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOKEN) || '{}') : '';
     });
 
     useEffect(() => {
-        token && localStorage.setItem(LOCAL_STORAGE_KEY_TOKEN, JSON.stringify(token));
+        token && typeof window !== 'undefined' && localStorage.setItem(LOCAL_STORAGE_KEY_TOKEN, JSON.stringify(token));
     }, [token]);
 
     const reset = () => {
         setUserData(DEFAULT_USER_DATA.userData);
-        localStorage.setItem(LOCAL_STORAGE_KEY_TOKEN, '');
-        localStorage.setItem(LOCAL_STORAGE_KEY_USER_DATA, '');
+        localStorage.setItem(LOCAL_STORAGE_KEY_TOKEN, JSON.stringify(''));
+        localStorage.setItem(LOCAL_STORAGE_KEY_USER_DATA, JSON.stringify(''));
     };
 
     return (

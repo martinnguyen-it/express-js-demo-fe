@@ -1,13 +1,8 @@
 import { ITour } from '@lib/types';
 import Link from 'next/link';
-import { useStateLinkContext } from '../lib/hooks/context';
 import { IMAGE_BASE_URL } from '../shared/constants';
 
 const Card = ({ tour }: { tour: ITour }) => {
-    const { setStateLink } = useStateLinkContext();
-    const handleClick = () => {
-        setStateLink({ id: tour.id });
-    };
     const tourDate = new Date(tour?.startDates[0]);
     const date = tourDate?.toLocaleString('en-us', {
         month: 'long',
@@ -62,14 +57,19 @@ const Card = ({ tour }: { tour: ITour }) => {
                 </div>
                 <div className='card__footer'>
                     <p>
-                        <span className='card__footer-value'>{tour.price}</span>{' '}
+                        <span className='card__footer-value'>
+                            {tour.price.toLocaleString('vi', {
+                                style: 'currency',
+                                currency: 'VND',
+                            })}
+                        </span>{' '}
                         <span className='card__footer-text'>per person</span>
                     </p>
                     <p className='card__ratings'>
                         <span className='card__footer-value'>{tour.ratingsAverage}</span>{' '}
                         <span className='card__footer-text'>{`rating (${tour.ratingsQuantity})`}</span>
                     </p>
-                    <Link onClick={handleClick} className='btn btn--green btn--small' href={`/tour/${tour.slug}`}>
+                    <Link className='btn btn--green btn--small' href={`/tour/${tour.slug}`}>
                         Details
                     </Link>
                 </div>

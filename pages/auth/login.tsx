@@ -6,7 +6,7 @@ import { useUserDataContext } from '@/src/lib/hooks/context';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 interface IForm {
@@ -17,7 +17,15 @@ const Login = () => {
     const router = useRouter();
     const { userData, setUserData, token, setToken } = useUserDataContext();
 
-    if (userData && userData.name && token) router.push('/');
+    useEffect(() => {
+        if (userData && userData.name && token) {
+            if (router.query && router.query.tour) {
+                router.push(`/tour/${router.query.tour}`);
+            } else {
+                router.push('/');
+            }
+        }
+    }, [router, token]);
 
     const {
         register,
