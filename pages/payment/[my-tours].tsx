@@ -1,7 +1,6 @@
 import Spinner from '@/src/components/Spinner';
 import { API } from '@/src/shared/constants';
 import axios from 'axios';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';

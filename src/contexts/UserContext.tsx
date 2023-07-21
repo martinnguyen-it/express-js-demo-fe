@@ -43,6 +43,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
 
     const reset = () => {
         setUserData(DEFAULT_USER_DATA.userData);
+        setToken('');
         localStorage.setItem(LOCAL_STORAGE_KEY_TOKEN, JSON.stringify(''));
         localStorage.setItem(LOCAL_STORAGE_KEY_USER_DATA, JSON.stringify(''));
     };

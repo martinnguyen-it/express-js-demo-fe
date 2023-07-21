@@ -12,6 +12,7 @@ import { IMAGE_BASE_URL } from '@/src/shared/constants';
 import { useRouter } from 'next/router';
 import QuickFact from '@/src/components/pages/tour/QuickFact';
 import { useGetLinkPayment } from '@/src/lib/hooks/api/booking/useGetLinkPayment';
+import { useMemo } from 'react';
 // import MapContainer from '@/src/components/map-box';
 
 const MapContainer = dynamic(import('@/src/components/map-box'), { ssr: false });
@@ -21,9 +22,14 @@ export default function Tour() {
     const { token } = useUserDataContext();
 
     const router = useRouter();
+
     const { isLoading, data, isSuccess } = useQuery(`tours/slug/${router.query.id}`, queryFunction);
-    const tour: ITour = data?.data.data;
-    const tourDate = new Date(tour?.startDates[0]);
+    const tour: ITour = isSuccess && data?.data.data;
+    const tourDate = useMemo(() => {
+        if (tour && tour?.startDates[0]) {
+            return new Date(tour?.startDates[0]);
+        }
+    }, [tour]);
     const date = tourDate?.toLocaleString('en-us', {
         month: 'long',
         year: 'numeric',
@@ -93,7 +99,7 @@ export default function Tour() {
                                     <QuickFact
                                         xlinkHref='/img/icons.svg#icon-calendar'
                                         label='Next date'
-                                        value={date}
+                                        value={`${date}`}
                                     />
                                     <QuickFact
                                         xlinkHref='/img/icons.svg#icon-trending-up'

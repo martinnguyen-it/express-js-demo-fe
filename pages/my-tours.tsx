@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
-export default function Home() {
+export default function MyTour() {
     const { isLoading, data, error, isSuccess } = useQuery('tours/me', queryFunction);
     useEffect(() => {
         const errorRespon = error as AxiosError<any, any> | undefined;

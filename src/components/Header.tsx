@@ -10,9 +10,9 @@ const Header = () => {
 
     const { userData, token, reset } = useUserDataContext();
 
-    const logout = useCallback(() => {
+    const logout = useCallback(async () => {
         toast.success('Logout successful!');
-        reset();
+        await reset();
         router.push('/');
     }, []);
 

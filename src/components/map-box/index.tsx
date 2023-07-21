@@ -49,18 +49,22 @@ const MapContainer = ({ locations }: { locations: ILocation[] }) => {
                             bounds.extend(loc.coordinates);
                         }
                     });
-                if (map && bounds) {
-                    const validBounds = await (bounds.getSouthWest() && bounds.getNorthEast());
+                if (map) {
+                    if (locations.length > 1) {
+                        const validBounds = await (bounds.getSouthWest() && bounds.getNorthEast());
 
-                    if (validBounds) {
-                        map.fitBounds(bounds, {
-                            padding: {
-                                top: 200,
-                                bottom: 150,
-                                left: 100,
-                                right: 100,
-                            },
-                        });
+                        if (validBounds) {
+                            map.fitBounds(bounds, {
+                                padding: {
+                                    top: 200,
+                                    bottom: 150,
+                                    left: 100,
+                                    right: 100,
+                                },
+                            });
+                        }
+                    } else {
+                        map.flyTo({ center: locations[0].coordinates, zoom: 4, essential: true });
                     }
                 }
             }
