@@ -16,6 +16,7 @@ export default function Home() {
             toast.error(errorRespon.message, {
                 autoClose: 5000,
             });
+            // throw new Error(`Can't not query tours`);
         }
     }, [error]);
     return (

@@ -41,7 +41,7 @@ const Login = () => {
             loginUser.sendRequest(
                 { payload: data },
                 {
-                    onSuccess: async (respon: any) => {
+                    onSuccess: (respon: any) => {
                         toast.success('Login successful!');
                         const user = {
                             name: respon.data.data.user.name,
@@ -49,8 +49,8 @@ const Login = () => {
                             photo: respon.data.data.user?.photo,
                             role: respon.data.data.user.role,
                         } as IUserData;
-                        await setToken(respon.data.token);
-                        await setUserData(user);
+                        setToken(respon.data.token);
+                        setUserData(user);
                         reset();
                     },
                     onError: (error) => {

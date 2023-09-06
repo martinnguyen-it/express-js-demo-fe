@@ -31,7 +31,11 @@ const Header = () => {
                     <>
                         <Link href='/me' className='nav__el'>
                             <img
-                                src={`${IMAGE_BASE_URL}/img/users/${userData.photo}`}
+                                src={
+                                    userData.photo
+                                        ? `${IMAGE_BASE_URL}/img/users/${userData.photo}`
+                                        : `/img/default.jpg`
+                                }
                                 alt='User'
                                 className='nav__user-img'
                             />

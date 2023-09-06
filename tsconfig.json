@@ -24,6 +24,6 @@
     },
   },
   
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "custom.d.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "custom.d.ts", "pages/checkout"],
   "exclude": ["node_modules"]
 }

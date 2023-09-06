@@ -1,7 +1,7 @@
 import { privateRouteWrapper, withAuthTokenWrapper } from '@/src/components/hoc/auth';
 import ChangeInfor from '@/src/components/pages/me/ChangeInfor';
 import ChangePassword from '@/src/components/pages/me/ChangePassword';
-import { queryFunction } from '@/src/lib/hooks/api';
+import { queryFunctionAuth } from '@/src/lib/hooks/api';
 import { useUserDataContext } from '@/src/lib/hooks/context';
 import Link from 'next/link';
 import { useMemo } from 'react';
@@ -9,7 +9,7 @@ import { useQuery } from 'react-query';
 
 const Me = () => {
     const { userData, setUserData } = useUserDataContext();
-    const { data: respon, isSuccess } = useQuery('users/me', queryFunction);
+    const { data: respon, isSuccess } = useQuery('users/me', queryFunctionAuth);
     const role = useMemo(() => {
         if (isSuccess && respon && respon.data && respon.data.data) {
             return respon.data.data.role;

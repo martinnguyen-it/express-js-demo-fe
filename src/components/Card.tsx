@@ -58,9 +58,9 @@ const Card = ({ tour }: { tour: ITour }) => {
                 <div className='card__footer'>
                     <p>
                         <span className='card__footer-value'>
-                            {tour.price.toLocaleString('vi', {
+                            {tour.price.toLocaleString('us-US', {
                                 style: 'currency',
-                                currency: 'VND',
+                                currency: 'USD',
                             })}
                         </span>{' '}
                         <span className='card__footer-text'>per person</span>

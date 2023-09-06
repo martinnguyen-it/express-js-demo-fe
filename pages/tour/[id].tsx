@@ -11,7 +11,6 @@ import Link from 'next/link';
 import { IMAGE_BASE_URL } from '@/src/shared/constants';
 import { useRouter } from 'next/router';
 import QuickFact from '@/src/components/pages/tour/QuickFact';
-import { useGetLinkPayment } from '@/src/lib/hooks/api/booking/useGetLinkPayment';
 import { useMemo } from 'react';
 // import MapContainer from '@/src/components/map-box';
 
@@ -35,22 +34,8 @@ export default function Tour() {
         year: 'numeric',
     });
 
-    const getLinkPaymentApi = useGetLinkPayment();
-
-    const onBooking = () => {
-        getLinkPaymentApi.sendRequest(
-            { payload: { amount: tour.price, tourId: tour.id } },
-            {
-                onSuccess: (respon: any) => {
-                    const vnpUrl = respon.data.data.vnpUrl;
-                    window.location.href = vnpUrl;
-                },
-            },
-        );
-    };
-
     return (
-        <>
+        <main className='main'>
             <Head>
                 <title>Natours | Exciting tours for adventurous people</title>
             </Head>
@@ -119,9 +104,9 @@ export default function Tour() {
                                     <QuickFact
                                         xlinkHref='/img/icons.svg#money'
                                         label='Price'
-                                        value={`${tour.price.toLocaleString('vi', {
+                                        value={`${tour.price.toLocaleString('us-US', {
                                             style: 'currency',
-                                            currency: 'VND',
+                                            currency: 'USD',
                                         })}`}
                                     />
                                 </div>
@@ -142,6 +127,27 @@ export default function Tour() {
                                       </p>
                                   ))
                                 : ''}
+                            {token ? (
+                                <>
+                                    {/* <button className='btn btn--green span-all-rows btn--loading' onClick={onBooking}>
+                                        {getLinkPaymentApi.isLoading && <Spinner />}
+                                        <p>Booking now!</p>
+                                    </button> */}
+                                    <Link
+                                        className='btn btn--green span-all-rows'
+                                        href={`/checkout/${router.query.id}`}
+                                    >
+                                        Booking now!
+                                    </Link>
+                                </>
+                            ) : (
+                                <Link
+                                    className='btn btn--green span-all-rows'
+                                    href={{ pathname: '/auth/login', query: { tour: router.query.id as string } }}
+                                >
+                                    Log in to book tour
+                                </Link>
+                            )}
                         </div>
                     </section>
                     <section className='section-pictures'>
@@ -193,10 +199,12 @@ export default function Tour() {
                                     5 days. 1 adventure. Infinite memories. Make it yours today!
                                 </p>
                                 {token ? (
-                                    <button className='btn btn--green span-all-rows btn--loading' onClick={onBooking}>
-                                        {getLinkPaymentApi.isLoading && <Spinner />}
-                                        <p>Booking now!</p>
-                                    </button>
+                                    <Link
+                                        className='btn btn--green span-all-rows'
+                                        href={`/checkout/${router.query.id}`}
+                                    >
+                                        Booking now!
+                                    </Link>
                                 ) : (
                                     <Link
                                         className='btn btn--green span-all-rows'
@@ -210,6 +218,6 @@ export default function Tour() {
                     </section>
                 </>
             )}
-        </>
+        </main>
     );
 }

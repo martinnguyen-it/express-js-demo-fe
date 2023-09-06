@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 const MyTour = () => {
     const router = useRouter();
+    console.log('🚀 ~ file: [my-tours].tsx:10 ~ MyTour ~ router:', router.query);
 
     useEffect(() => {
         if (router.query && router.query.vnp_SecureHash) {

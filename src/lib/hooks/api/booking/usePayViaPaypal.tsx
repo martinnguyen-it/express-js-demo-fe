@@ -7,10 +7,10 @@ type TRequestRequiredParams = {
 
 type TResponse = Array<any>;
 
-export function useGetLinkPayment() {
+export function usePayViaPaypal() {
     const restAPI = useMutationApi<TResponse, TRequestRequiredParams>((requestRequiredParams) => ({
         method: 'POST',
-        endpoint: '/pay/create_payment_url',
+        endpoint: '/pay/pay_via_paypal',
         payload: requestRequiredParams.payload,
     }));
 

@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Card from '@/src/components/Card';
 import { useQuery } from 'react-query';
-import { queryFunction } from '@/src/lib/hooks/api';
+import { queryFunctionAuth } from '@/src/lib/hooks/api';
 import { isEmpty, map } from 'lodash';
 import Spinner from '@/src/components/Spinner';
 import { useEffect } from 'react';
@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 export default function MyTour() {
-    const { isLoading, data, error, isSuccess } = useQuery('tours/me', queryFunction);
+    const { isLoading, data, error, isSuccess } = useQuery('tours/me', queryFunctionAuth);
     useEffect(() => {
         const errorRespon = error as AxiosError<any, any> | undefined;
         if (errorRespon) {
