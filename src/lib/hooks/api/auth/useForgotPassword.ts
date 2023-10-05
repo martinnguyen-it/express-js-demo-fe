@@ -11,7 +11,7 @@ type TResponse = Array<any>;
 export function useForgotPassword() {
     const restAPI = useMutationApi<TResponse, TRequestRequiredParams>((requestRequiredParams) => ({
         method: 'POST',
-        endpoint: '/users/forgot-password',
+        endpoint: '/auth/forgot-password',
         payload: requestRequiredParams.payload,
     }));
 

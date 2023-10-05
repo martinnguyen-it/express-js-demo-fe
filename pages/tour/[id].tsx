@@ -11,24 +11,19 @@ import Link from 'next/link';
 import { IMAGE_BASE_URL } from '@/src/shared/constants';
 import { useRouter } from 'next/router';
 import QuickFact from '@/src/components/pages/tour/QuickFact';
-import { useMemo } from 'react';
 // import MapContainer from '@/src/components/map-box';
 
 const MapContainer = dynamic(import('@/src/components/map-box'), { ssr: false });
 const ReviewSlider = dynamic(import('@/src/components/pages/tour/review/index'), { ssr: false });
 
 export default function Tour() {
-    const { token } = useUserDataContext();
+    const { access_token } = useUserDataContext();
 
     const router = useRouter();
 
     const { isLoading, data, isSuccess } = useQuery(`tours/slug/${router.query.id}`, queryFunction);
     const tour: ITour = isSuccess && data?.data.data;
-    const tourDate = useMemo(() => {
-        if (tour && tour?.startDates[0]) {
-            return new Date(tour?.startDates[0]);
-        }
-    }, [tour]);
+    const tourDate = tour && tour?.startDates[0] && new Date(tour?.startDates[0]);
     const date = tourDate?.toLocaleString('en-us', {
         month: 'long',
         year: 'numeric',
@@ -127,7 +122,7 @@ export default function Tour() {
                                       </p>
                                   ))
                                 : ''}
-                            {token ? (
+                            {access_token ? (
                                 <>
                                     {/* <button className='btn btn--green span-all-rows btn--loading' onClick={onBooking}>
                                         {getLinkPaymentApi.isLoading && <Spinner />}
@@ -198,7 +193,7 @@ export default function Tour() {
                                 <p className='cta__text'>
                                     5 days. 1 adventure. Infinite memories. Make it yours today!
                                 </p>
-                                {token ? (
+                                {access_token ? (
                                     <Link
                                         className='btn btn--green span-all-rows'
                                         href={`/checkout/${router.query.id}`}

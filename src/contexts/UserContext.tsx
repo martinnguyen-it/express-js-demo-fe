@@ -13,7 +13,7 @@ export interface IUserDataContext {
     userData: IUserData;
     setUserData: React.Dispatch<React.SetStateAction<IUserData>>;
     reset: () => void;
-    token: string;
+    access_token: string;
     setToken: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -22,7 +22,7 @@ const DEFAULT_USER_DATA: IUserDataContext = {
     setUserData: () => {},
     reset: () => {},
     setToken: () => {},
-    token: '',
+    access_token: '',
 };
 
 const UserContext = React.createContext<IUserDataContext>(DEFAULT_USER_DATA);
@@ -33,13 +33,15 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
         defaultValue: DEFAULT_USER_DATA.userData,
     });
 
-    const [token, setToken] = useState<string>(() => {
+    const [access_token, setToken] = useState<string>(() => {
         return typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOKEN) || '{}') : '';
     });
 
     useEffect(() => {
-        token && typeof window !== 'undefined' && localStorage.setItem(LOCAL_STORAGE_KEY_TOKEN, JSON.stringify(token));
-    }, [token]);
+        access_token &&
+            typeof window !== 'undefined' &&
+            localStorage.setItem(LOCAL_STORAGE_KEY_TOKEN, JSON.stringify(access_token));
+    }, [access_token]);
 
     const reset = () => {
         setUserData(DEFAULT_USER_DATA.userData);
@@ -49,7 +51,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
     };
 
     return (
-        <UserContext.Provider value={{ userData, setUserData, reset, token, setToken }}>
+        <UserContext.Provider value={{ userData, setUserData, reset, access_token, setToken }}>
             {children}
         </UserContext.Provider>
     );

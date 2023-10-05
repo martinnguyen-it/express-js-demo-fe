@@ -5,16 +5,16 @@ import { useRouter } from 'next/router';
 import { QueryFunctionContext } from 'react-query';
 
 export const queryFunctionAuth = (queryContext: QueryFunctionContext) => {
-    const token =
+    const access_token =
         typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOKEN) || '{}') : '';
 
-    if (!token) {
+    if (!access_token) {
         useRouter().push('/auth/login');
     }
 
     const endpoint = isArray(queryContext.queryKey) ? queryContext.queryKey[0] : queryContext.queryKey || '';
     return axios({
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${access_token}` },
         method: 'GET',
         baseURL: API,
         url: endpoint,

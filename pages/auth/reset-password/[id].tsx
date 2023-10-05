@@ -14,9 +14,9 @@ const ResetPassword = () => {
     const router = useRouter();
     const { id } = router.query;
 
-    const { userData, setUserData, token } = useUserDataContext();
+    const { userData, setUserData, access_token } = useUserDataContext();
 
-    if (userData && userData.name && token) router.push('/');
+    if (userData && userData.name && access_token) router.push('/');
 
     const {
         register,
@@ -40,7 +40,7 @@ const ResetPassword = () => {
                             email: respon.data.data.user.email,
                             photo: respon.data.data.user?.photo,
                             role: respon.data.data.user.role,
-                            token: respon.data.token,
+                            access_token: respon.data.access_token,
                         } as IUserData;
 
                         await setUserData(user);

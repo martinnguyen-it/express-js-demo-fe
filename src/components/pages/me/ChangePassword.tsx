@@ -26,7 +26,7 @@ const ChangePassword = ({ setUserData }: { setUserData: React.Dispatch<React.Set
                 {
                     onSuccess: async (respon: any) => {
                         reset();
-                        setUserData((prev) => ({ ...prev, token: respon.data.token }));
+                        setUserData((prev) => ({ ...prev, access_token: respon.data.access_token }));
                         toast.success('Update successful!');
                     },
                     onError: (error) => {

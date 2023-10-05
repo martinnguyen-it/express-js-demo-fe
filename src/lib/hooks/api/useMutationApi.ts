@@ -9,7 +9,7 @@ export function useMutationApi<TResponse = any, TRequestRequiredParams = any>(
     sendRequestFunction: (requestRequiredParams: TRequestRequiredParams) => TMutationAPIEndPoints,
 ) {
     const [responseBody, setResponseBody] = useState<any>();
-    const token =
+    const access_token =
         typeof window !== 'undefined' ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOKEN) || '{}') : '';
 
     const mutationFunction: MutationFunction<AxiosResponse<TResponse>, TRequestRequiredParams> = React.useCallback(
@@ -17,14 +17,14 @@ export function useMutationApi<TResponse = any, TRequestRequiredParams = any>(
             const sendRequestParams = sendRequestFunction(requestRequiredParams);
             return sendRequestParams.payload
                 ? axios({
-                      headers: token ? { Authorization: `Bearer ${token}` } : {},
+                      headers: access_token ? { Authorization: `Bearer ${access_token}` } : {},
                       method: sendRequestParams.method,
                       baseURL: API,
                       url: sendRequestParams.endpoint,
                       data: sendRequestParams.payload,
                   })
                 : axios({
-                      headers: token ? { Authorization: `Bearer ${token}` } : {},
+                      headers: access_token ? { Authorization: `Bearer ${access_token}` } : {},
                       method: sendRequestParams.method,
                       baseURL: API,
                       url: sendRequestParams.endpoint,

@@ -8,7 +8,7 @@ import { IMAGE_BASE_URL } from '../shared/constants';
 const Header = () => {
     const router = useRouter();
 
-    const { userData, token, reset } = useUserDataContext();
+    const { userData, access_token, reset } = useUserDataContext();
 
     const logout = useCallback(async () => {
         toast.success('Logout successful!');
@@ -27,7 +27,7 @@ const Header = () => {
                 <img src='/img/logo-white.png' alt='Natours logo' />
             </div>
             <nav className='nav nav--user'>
-                {userData && userData.name && token ? (
+                {userData && userData.name && access_token ? (
                     <>
                         <Link href='/me' className='nav__el'>
                             <img

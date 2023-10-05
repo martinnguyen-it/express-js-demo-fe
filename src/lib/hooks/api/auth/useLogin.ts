@@ -10,7 +10,7 @@ type TResponse = Array<any>;
 export function useLogin() {
     const restAPI = useMutationApi<TResponse, TRequestRequiredParams>((requestRequiredParams) => ({
         method: 'POST',
-        endpoint: '/users/login',
+        endpoint: '/auth/login',
         payload: requestRequiredParams.payload,
     }));
 

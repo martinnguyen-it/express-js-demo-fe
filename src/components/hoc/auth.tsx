@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useUserDataContext } from '@/src/lib/hooks/context';
 
 export interface AuthProps {
-    token?: string;
+    access_token?: string;
 }
 
 /**
@@ -18,9 +18,9 @@ export const withAuthTokenWrapper = (
     Component: NextComponentType<NextPageContext, unknown, AuthProps>,
 ): NextComponentType => {
     const WrappedComponent: FC = (props) => {
-        const { token } = useUserDataContext();
+        const { access_token } = useUserDataContext();
 
-        return <Component token={token} {...props} />;
+        return <Component access_token={access_token} {...props} />;
     };
 
     return WrappedComponent;
@@ -34,17 +34,17 @@ export const withAuthTokenWrapper = (
  * @returns {NextComponentType}
  */
 export const privateRouteWrapper = (Component: NextComponentType, redirectUrl = '/'): NextComponentType => {
-    const WrappedComponent: FC<AuthProps> = ({ token, ...restProps }) => {
+    const WrappedComponent: FC<AuthProps> = ({ access_token, ...restProps }) => {
         const router = useRouter();
         const { reset } = useUserDataContext();
 
         useEffect(() => {
             // Always do navigations after the first render
-            if (token) return;
+            if (access_token) return;
             reset();
             // redirect if not auth
             router.push(redirectUrl);
-        }, [token, router, reset]);
+        }, [access_token, router, reset]);
 
         // show loading when redirecting
         // if (!authToken) {

@@ -8,7 +8,7 @@ import { CreateOrderActions, CreateOrderData, OnApproveActions, OnApproveData } 
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { isEmpty, map } from 'lodash';
 import { useRouter } from 'next/router';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 
 /* eslint-disable @next/next/no-html-link-for-pages */
@@ -20,11 +20,7 @@ const Checkout = () => {
     const { isLoading, data, isSuccess } = useQuery(`tours/slug/${router.query.id}`, queryFunction);
     const tour: ITour = isSuccess && data?.data.data;
 
-    const tourDate = useMemo(() => {
-        if (tour && tour?.startDates[0]) {
-            return new Date(tour?.startDates[0]);
-        }
-    }, [tour]);
+    const tourDate = tour && tour?.startDates[0] && new Date(tour?.startDates[0]);
 
     const date = tourDate?.toLocaleString('en-us', {
         day: 'numeric',
@@ -68,7 +64,9 @@ const Checkout = () => {
 
     const onApprove = useCallback(
         async (data: OnApproveData, actions: OnApproveActions) => {
+            console.log('🚀 ~ file: [id].tsx:71 ~ data:', data);
             const details = await (actions && actions.order && actions.order.capture());
+            console.log('🚀 ~ file: [id].tsx:73 ~ details:', details);
 
             if (details?.status === 'COMPLETED') {
                 const payload = { amount: tour.price, tourId: tour.id, paid: true, orderId: data.orderID };

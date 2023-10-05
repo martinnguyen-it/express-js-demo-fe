@@ -11,9 +11,9 @@ interface IForm {
 }
 const ForgotPassword = () => {
     const router = useRouter();
-    const { userData, token } = useUserDataContext();
+    const { userData, access_token } = useUserDataContext();
 
-    if (userData && userData.name && token) router.push('/');
+    if (userData && userData.name && access_token) router.push('/');
 
     const {
         register,

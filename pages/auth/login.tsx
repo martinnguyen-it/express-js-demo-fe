@@ -15,17 +15,17 @@ interface IForm {
 }
 const Login = () => {
     const router = useRouter();
-    const { userData, setUserData, token, setToken } = useUserDataContext();
+    const { userData, setUserData, access_token, setToken } = useUserDataContext();
 
     useEffect(() => {
-        if (userData && userData.name && token) {
+        if (userData && userData.name && access_token) {
             if (router.query && router.query.tour) {
                 router.push(`/tour/${router.query.tour}`);
             } else {
                 router.push('/');
             }
         }
-    }, [router, token]);
+    }, [router, access_token]);
 
     const {
         register,
@@ -49,7 +49,7 @@ const Login = () => {
                             photo: respon.data.data.user?.photo,
                             role: respon.data.data.user.role,
                         } as IUserData;
-                        setToken(respon.data.token);
+                        setToken(respon.data.access_token);
                         setUserData(user);
                         reset();
                     },

@@ -8,6 +8,6 @@ export const useStateLinkContext = () => {
 };
 
 export const useUserDataContext = () => {
-    const { userData, setUserData, reset, token, setToken } = useContext(UserContext);
-    return { userData, setUserData, reset, token, setToken };
+    const { userData, setUserData, reset, access_token, setToken } = useContext(UserContext);
+    return { userData, setUserData, reset, access_token, setToken };
 };
